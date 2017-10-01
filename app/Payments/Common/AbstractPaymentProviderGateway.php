@@ -5,7 +5,7 @@ namespace App\Payments\Common;
 use App\Exceptions\IncorrectHashSummException;
 use App\User;
 
-abstract class AbstractPaymentProviderGateway implements PaymentProviderGatewayInterface
+abstract class AbstractPaymentProviderGateway
 {
     /**
      * Secret key
