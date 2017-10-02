@@ -11,7 +11,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 10)
+        factory(App\User::class, 3)
             ->create()
             ->each(function ($u) {
                 $transactionCount = rand(4, 10);

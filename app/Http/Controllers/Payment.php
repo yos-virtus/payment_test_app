@@ -15,20 +15,20 @@ class Payment extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function __invoke($paymentProvider, Request $request)
+    public function __invoke($paymentProviderRoute, Request $request)
     {
-        $paymentService = new PaymentService($paymentProvider, $request);
+        $paymentService = new PaymentService($paymentProviderRoute, $request->all());
 
         try {
-
+            $paymentService->setTestMode();
+            
             $paymentService->check();
             $paymentService->updateUserBalance();
-            $paymentService->response("Success");
+            $response = $paymentService->response("Success");
+        } catch (IncorrectHashSummException | UserBalanceUpdateException $e) {
+            $response = $paymentService->response("Error");
+        } 
 
-        } catch (IncorrectHashSummException $e1) {
-            $paymentService->response("Error");
-        } catch (UserBalanceUpdateException $e2 ) {
-            $paymentService->response("Error");
-        }
+        return view('payment', compact('response'));
     }
 }

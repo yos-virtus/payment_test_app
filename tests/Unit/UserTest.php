@@ -16,6 +16,11 @@ class UserTest extends TestCase
 
         $user->updateBalance(33.00);
 
+        $this->assertDatabaseHas('user', [
+            'id' => $user->id,
+            'balance' => 33.00,
+        ]);
+
         $this->assertDatabaseHas('user_transaction', [
             'user_id' => $user->id,
             'amount' => 33.00,

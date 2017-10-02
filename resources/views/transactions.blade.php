@@ -9,16 +9,26 @@
                 <div class="panel-body" >
                     <form action="/transactions" method="get" class="form-horizontal">
                         <!-- <div class="row"> -->
-                            <div class="form-group">
-                                <label for="name" class="col-sm-2 control-label control-label-sm">Пользователь: </label>      
-                                <div class="col-sm-4">                  
-                                    <input type="text" name="name"  value="{{ $user->name ?? '' }}" class="form-control input-sm">
-                                </div>
-                                <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-sm btn-block btn-primary">Найти</button>
-                                </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label control-label-sm">Пользователь: </label>      
+                            <div class="col-sm-4">                  
+                                <input type="text" name="name"  value="{{ $user->name ?? '' }}" class="form-control input-sm">
                             </div>
-                        <!-- </div> -->
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-sm btn-block btn-primary">Найти</button>
+                            </div>
+                        </div>
+                        <hr>
+                        @if($user)
+                        <div class="row">                            
+                            <div class="col-sm-4">
+                                <p><strong>Баланс пользователя {{  $user->name }}</strong></p>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ number_format($user->balance, 2, ',', ' ') }}
+                            </div>
+                        </div>
+                        @endif
                         <br>
                         <div class="row">                            
                             <div class="col-sm-12">

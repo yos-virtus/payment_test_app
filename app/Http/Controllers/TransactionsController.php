@@ -11,7 +11,7 @@ class TransactionsController extends Controller
     public function index(Request $request)
     {
         $user = User::with(['transactions' => function($query) {
-                        return $query->orderBy('created_at')->take(30);
+                        return $query->orderBy('created_at', 'desc')->take(30);
                     }])->where('name', $request->name)->first();
 
 

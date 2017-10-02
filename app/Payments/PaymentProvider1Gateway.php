@@ -29,7 +29,7 @@ class PaymentProvider1Gateway extends AbstractPaymentProviderGateway
      * 
      * @var string
      */
-    protected $url = 'http://payment.dev:85/provider1';
+    protected $url = 'http://httpbin.kkorg/post';
 
     /**
      * Valid get request fields
@@ -48,9 +48,7 @@ class PaymentProvider1Gateway extends AbstractPaymentProviderGateway
     {
         $this->httpClient = new \GuzzleHttp\Client();
 
-        if (! empty($data)) {
-            $this->initialize($data);
-        }
+        $this->initialize($data);
     }
 
     /**
@@ -61,33 +59,40 @@ class PaymentProvider1Gateway extends AbstractPaymentProviderGateway
      */
     public function initialize(array $data)
     {
-        $this->checkDataForIntegrity($data);
+        if (! empty($data)) {
+            $this->checkDataForIntegrity($data);
+        }
 
-        $this->userId = $data['a'];
-        $this->summ = $data['b'];
-        $this->hashSumm = $data['md5'];
+        $this->userId = $data['a'] ?? null;
+        $this->summ = $data['b'] ?? null;
+        $this->hashSumm = $data['md5'] ?? null;
 
         return $this;
     }
 
+    /**
+     * Response to provider server
+     * 
+     * @param  string
+     * @return Guzzle\HttpResponse
+     */
     public function response($type)
     {
-        $xmlString = "<?xml version='1.0' standalone='yes'?>";
+        $xml = new \SimpleXMLElement("<answer></answer>");
 
         if ($type === "Success") {
-            
-            $xmlString .= "<answer>1</answer>";
-            $answerXml = simplexml_load_string($xmlString);
+            $xml[0] = 1;
         }
 
         if ($type === "Error") {
-            $xmlString .= "<answer>0</answer>";
-            $answerXml = simplexml_load_string($xmlString);
+            $xml[0] = 0;
         }
 
-        $this->httpClient->request( 'POST', 
+        return $this->httpClient->request( 'POST', 
             $this->getResponseUrl(),
-            ['Content-Type' => 'text/xml; charset=UTF8'],
-            $answerXml);
+            [
+                'Content-Type' => 'text/xml; charset=UTF8',
+                'body' => $xml->asXml()
+            ]);
     }
 }

@@ -38,4 +38,13 @@ class UserTransaction extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * [getAmountAttribute description]
+     * @return [type] [description]
+     */
+    public function getAmountAttribute()
+    {
+        return number_format($this->attributes['amount'], 2, ',', ' ');
+    }
 }

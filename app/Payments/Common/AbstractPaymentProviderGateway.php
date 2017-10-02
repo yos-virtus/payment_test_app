@@ -36,6 +36,11 @@ abstract class AbstractPaymentProviderGateway
     protected $validProviderDataKeys;
 
     /**
+     * 
+     */
+    protected $isTestMode = false;
+
+    /**
      * Get provider name
      * 
      * @return string
@@ -92,7 +97,27 @@ abstract class AbstractPaymentProviderGateway
      */
     public function getResponseUrl()
     {
-        return $this->url;
+        return $this->isTestMode ? 'http://httpbin.org/post' : $this->url;
+    }
+
+    /**
+     * Rsponse url
+     * 
+     * @return string
+     */
+    public function setTestMode()
+    {
+        $this->isTestMode = true;
+    }
+
+    /**
+     * Rsponse url
+     * 
+     * @return string
+     */
+    public function setProductionMode()
+    {
+        $this->isTestMode = false;
     }
 
     /**

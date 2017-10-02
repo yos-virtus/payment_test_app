@@ -58,4 +58,40 @@ class PaymentsTest extends TestCase
             'amount' => $amount
         ]);
     }
+
+     /** @test */
+    function it_doesnt_change_user_balance_when_recieving_wrong_hash_from_provider1()
+    {
+        $user = factory('App\User')->create();
+
+        $amount = 88.00;
+
+        $request = $this->get("payments/test1?a=$user->id&b=$amount&md5=WrongHash");
+
+        $this->get("/transactions?name={$user->name}")
+            ->assertSee("0,00");
+
+        $this->assertDatabaseHas('user', [
+            'id' => $user->id,
+            'balance' => '0.0'
+        ]);
+    }
+
+    /** @test */
+    function it_doesnt_change_user_balance_when_recieving_wrong_hash_from_provider2()
+    {
+        $user = factory('App\User')->create();
+
+        $amount = 88.00;
+
+        $request = $this->get("payments/asdgOasds?x=$user->id&y=$amount&md5=WrongHash");
+
+        $this->get("/transactions?name={$user->name}")
+            ->assertSee("0,00");
+
+        $this->assertDatabaseHas('user', [
+            'id' => $user->id,
+            'balance' => '0.0'
+        ]);
+    }
 }

@@ -43,15 +43,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * [getAmountAttribute description]
-     * @return [type] [description]
-     */
-    public function getAmountAttribute()
-    {
-        return number_format($this->attributes['amount'], 2, ',', ' ');
-    }
-
-    /**
      * User transactions
      * 
      * @return Illuminate\Database\Eloquent\Relations\HasMany
@@ -71,11 +62,11 @@ class User extends Authenticatable
         \DB::beginTransaction();
 
         try {
-            $this->balance += $amount;
+            $this->balance += (float)$amount;
             $this->updated_at = \Carbon\Carbon::now();
 
             $this->transactions()->create([
-                'amount' => $amount,
+                'amount' => (float)$amount,
                 'created_at' => \Carbon\Carbon::now()
             ]);
 

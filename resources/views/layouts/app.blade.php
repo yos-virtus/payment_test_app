@@ -36,7 +36,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="/payments/test1">Провайдеры</a></li>
+                        <li><a href="/transactions">Транзакции</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -7,6 +7,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/', function() {
+    return redirect('/payments/test1');
+});
+
 Route::get('/transactions', 'TransactionsController@index');
 
 // Route::get('/payments/{payment}', 'PaymentController@process');

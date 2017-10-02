@@ -29,7 +29,7 @@ class PaymentProvider2Gateway extends AbstractPaymentProviderGateway
      * 
      * @var string
      */
-    protected $url = 'https://provider2.dev';
+    protected $url = 'http://httpbin.org/post';
 
     /**
      * Valid get request fields
@@ -61,7 +61,9 @@ class PaymentProvider2Gateway extends AbstractPaymentProviderGateway
      */
     public function initialize(array $data)
     {
-        $this->checkDataForIntegrity($data);
+        if (! empty($data)) {
+            $this->checkDataForIntegrity($data);
+        }
 
         $this->userId = $data['x'];
         $this->summ = $data['y'];
@@ -80,9 +82,11 @@ class PaymentProvider2Gateway extends AbstractPaymentProviderGateway
             $answerText = 'Error';
         }
 
-        $this->httpClient->request( 'POST', 
+        return $this->httpClient->request( 'POST', 
             $this->getResponseUrl(),
-            ['Content-Type' => 'text/plain; charset=UTF8'],
-            $answerText);
+            [
+                'Content-Type' => 'text/plain; charset=UTF8',
+                'body' => $answerText
+            ]);
     }
 }

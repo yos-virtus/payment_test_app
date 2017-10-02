@@ -7,13 +7,12 @@ class PaymentService
     /**
      * Payment seevice gateway
      * 
-     * @var [type]
+     * @var App\Payments\Common\AbstractPaymentProviderGateway
      */
     protected $paymentProvider;
 
-    public function __construct($paymentProviderRoute, $request)
+    public function __construct($paymentProviderRoute, $data)
     {
-        $data = $request->all();
         if ($paymentProviderRoute == 'test1') {
             $this->paymentProvider = new PaymentProvider1Gateway($data);
         } elseif ($paymentProviderRoute == 'asdgOasds') {
@@ -26,12 +25,20 @@ class PaymentService
     public function __call($name, $params) 
     {
         $usedParamsString =  $this->paramsToString($params);
+
+        // \Log::useDailyFiles(storage_path().'/logs/payments.log');
         
         \Log::info('Вызван метод '. $name . ' с параметрами ' . $usedParamsString);
 
         return call_user_func_array(array($this->paymentProvider, $name), $params);
     }
 
+    /**
+     * Convert array of params to redable stirng  string
+     * 
+     * @param  array
+     * @return string
+     */
     private function paramsToString($params)
     {
         $usedParamsString = '';
@@ -40,5 +47,4 @@ class PaymentService
         }
         return $usedParamsString;
     }
-    
 }
